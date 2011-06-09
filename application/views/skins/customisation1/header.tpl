@@ -89,7 +89,7 @@
 
     <div id="header">
             <div id="headertext">
-            <strong>INEX :: IXP Manager</strong>
+            <strong>IXP Manager</strong>
             </div>
         </div>
     </div>
