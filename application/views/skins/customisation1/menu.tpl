@@ -15,24 +15,6 @@
                 {/if}
                 _cmSplit,
                 {if $identity.user.privs eq 3}
-                    [null,'Super User',null,null,'Super User',
-                    ['<img src="{genUrl}/images/joomla-admin/menu/globe4.png" />',     'Locations',            '{genUrl controller="location"}',
-                                    null,'Locations' ],
-                    ['<img src="{genUrl}/images/joomla-admin/menu/cabinets.png" />',   'Cabinets',             '{genUrl controller="cabinet"}',
-                                    null,'Cabinets'  ],
-                    ['<img src="{genUrl}/images/joomla-admin/menu/switch.png" />',     'Switches',             '{genUrl controller="switch"}',
-                                    null,'Switches',
-                        ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />',  'Switch Ports',  '{genUrl controller="switch-port"}',
-                            null,'Switch Ports'   ]
-                    ],
-                    ['<img src="{genUrl}/images/joomla-admin/menu/vendors.png" />',    'Vendors',              '{genUrl controller="vendor"}',
-                                    null,'Vendors'   ],
-                    ['<img src="{genUrl}/images/joomla-admin/menu/console.png" />',    'Console Connections',  '{genUrl controller="console-server-connection"}',
-                                    null,'Console Connections'   ],
-                    ['<img src="{genUrl}/images/joomla-admin/menu/vlan.png" />',       'VLANs',                '{genUrl controller="vlan"}',
-                                    null, 'VLANs'   ]
-                    ],
-                    _cmSplit,
                     [null,'Admin',null,null,'Admin',
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/users.png" />','Members',  '{genUrl controller="customer"}',
 	                                    null,'Members'   ],
@@ -46,13 +28,10 @@
 	                                        null, 'VLAN Interfaces'   ]
 
 	                    ],
-	                    ['<img src="{genUrl}/images/joomla-admin/menu/kontact.png" />','Contacts',  '{genUrl controller="contact"}',
-	                                    null, 'Contacts'   ],
-	                    ['<img src="{genUrl}/images/joomla-admin/menu/system-users.png" />','Users',  '{genUrl controller="user"}',
+	                    ['<img src="{genUrl}/images/joomla-admin/menu/vlan.png" />',        'VLANs',    '{genUrl controller="vlan"}',
+                                        null, 'VLANs'   ],
+	                    ['<img src="{genUrl}/images/joomla-admin/menu/system-users.png" />','Users',    '{genUrl controller="user"}',
 	                                    null, 'Users'   ],
-
-	                    ['<img src="{genUrl}/images/joomla-admin/menu/drive-optical.png" />','Customer Kit',  '{genUrl controller="cust-kit"}',
-	                                    null, 'Customer Kit'   ],
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/contents.png" />','Change Log',  '{genUrl controller="change-log"}',
 	                                    null, 'Change Log'   ],
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/config.png" />','IRRDB Config',  '{genUrl controller="irrdb-config"}',
