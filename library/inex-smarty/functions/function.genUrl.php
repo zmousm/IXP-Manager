@@ -38,7 +38,7 @@
  */
 function smarty_function_genUrl( $params, &$smarty )
 {
-    $url = Zend_Controller_Front::getInstance()->getBaseUrl(); 
+    $url = $smarty->_tpl_vars['pagebase'];
         
     if( isset( $params['controller'] ) )
     {
