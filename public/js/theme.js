@@ -1,6 +1,6 @@
 
 // directory of where all the images are
-var cmThemeOfficeBase = '/ixp/images/joomla-admin/menu/';
+var cmThemeOfficeBase = '/images/joomla-admin/menu/';
 
 var cmThemeOffice =
 {
