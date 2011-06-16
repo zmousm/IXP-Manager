@@ -602,6 +602,234 @@ END_JSON;
 
         $this->view->display( 'customer' . DIRECTORY_SEPARATOR . 'statistics-list.tpl' );
     }
+    
+    
+    
+    public function quickAddAction()
+    {
+        
+        $f = new INEX_Form_Customer_QuickAdd( null, false, $cancelLocation );
+
+        // Process a submitted form if it passes initial validation
+        if( $this->inexGetPost( 'commit' ) !== null && $f->isValid( $_POST ) )
+        {
+            do
+            {
+                // check customer information
+                if( Doctrine_Core::getTable( 'Cust' )->findOneByShortname( $f->getValue( 'shortname' ) ) 
+                    || Doctrine_Core::getTable( 'User' )->findOneByUsername( $f->getValue( 'shortname' ) )
+                )
+                {
+                    $f->getElement( 'shortname' )->addError( 'The provided shortname / username already exists' );
+                    break;
+                }
+                
+                // get the default vlan
+                $vlan = Doctrine_Core::getTable( 'Vlan' )->find( 1 );
+                
+                if( !$vlan )
+                {
+                    $vlan = new Vlan();
+                    $vlan['name']   = 'QuickAdd-Dummy-VLAN';
+                    $vlan['number'] = '10';
+                    $vlan->save();
+                }
+                
+                
+                // we need one of v4 or v6
+                $ipv4 = (bool)$f->getValue( 'ipv4enabled' );
+                $ipv6 = (bool)$f->getValue( 'ipv6enabled' );
+
+                if( $ipv4 )
+                {
+                    // is the IPv4 address valid and has it been used?
+                    $ipv4addr = Doctrine_Core::getTable( 'Ipv4address' )->find( $f->getValue( 'ipv4addressid' ) );
+                    
+                    if( !$ipv4addr )
+                    {
+                        $f->getElement( 'ipv4addressid' )->addError( 'The provided address is invalid' );
+                        break;
+                    }
+
+                    if( Doctrine_Core::getTable( 'Vlaninterface' )->findOneByIpv4addressid( $ipv4addr['id'] ) )
+                    {
+                        $f->getElement( 'ipv4addressid' )->addError( 'The provided address is in use already' );
+                        break;
+                    }
+                }
+                
+                if( $ipv6 )
+                {
+                    // is the IPv6 address valid and has it been used?
+                    $ipv6addr = Doctrine_Core::getTable( 'Ipv6address' )->findOneByAddress( $f->getValue( 'ipv6address' ) );
+                    
+                    if( !$ipv6addr )
+                    {
+                        // create it
+                        $ipv6addr = new Ipv6address();
+                        $ipv6addr['address'] = $f->getValue( 'ipv6address' );
+                        $ipv6addr['vlanid']  = $vlan['id'];
+                        $ipv6addr->save();
+                    }
+                    else if( Doctrine_Core::getTable( 'Vlaninterface' )->findOneByIpv6addressid( $ipv6addr['id'] ) )
+                    {
+                        $f->getElement( 'ipv6address' )->addError( 'The provided address is in use already' );
+                        break;
+                    }
+                }
+                
+                
+                // create the entities
+                $conn = Doctrine_Manager::connection();
+                $conn->beginTransaction();
+                
+                try
+                {
+                    // create the customer
+                    $c = new Cust();
+                    $c['name']                = $f->getValue( 'name' );
+                    $c['shortname']           = $f->getValue( 'shortname' );
+                    $c['type']                = Cust::TYPE_FULL;
+                    $c['autsys']              = $f->getValue( 'autsys' );
+                    $c['maxprefixes']         = $f->getValue( 'maxprefixes' );
+                    $c['peeringemail']        = $f->getValue( 'peeringemail' );
+                    $c['corpwww']             = $f->getValue( 'corpwww' );
+                    $c['nocphone']            = $f->getValue( 'nocphone' );
+                    $c['noc24hphone']         = $f->getValue( 'noc24hphone' );
+                    $c['nocfax']              = $f->getValue( 'nocfax' );
+                    $c['nocemail']            = $f->getValue( 'nocemail' );
+                    $c['nochours']            = $f->getValue( 'nochours' );
+                    $c['nocwww']              = $f->getValue( 'nocwww' );
+                    $c['irrdb']               = $f->getValue( 'irrdb' );
+                    $c['peeringpolicy']       = $f->getValue( 'open' );
+                    $c['datejoin']            = date( 'Y-m-d' );
+                    $c['status']              = Cust::STATUS_NORMAL;
+                    $c['activepeeringmatrix'] = 1;
+                    $c['creator']             = $this->user['username'];
+                    $c->save();
+                    
+                    // create a user
+                    $u = new User();
+                    $u['username'] = $c['shortname'];
+                    $u['password'] = UserTable::createRandomPassword( 8 );
+                    $u['email']    = $c['nocemail'];
+                    $u['custid']   = $c['id'];
+                    $u['privs']    = User::AUTH_CUSTADMIN;
+                    $u['creator']  = $this->user['username'];
+                    $u->save();
+                    
+                    // virtual interface
+                    $vi = new Virtualinterface();
+                    $vi['custid'] = $c['id'];
+                    $vi['name']   = $c['shortname'];
+                    $vi->save();
+                    
+                    // load or create the dummy switch
+                    $s = Doctrine_Core::getTable( 'SwitchTable' )->findOneByName( 'QuickAdd-Dummy-Switch' );
+                    
+                    if( !$s )
+                    {
+                        // get the cabinet
+                        $cab = Doctrine_Core::getTable( 'Cabinet' )->findOneByName( 'QuickAdd-Dummy-Cabinet' );
+                        
+                        if( !$cab )
+                        {
+                            // get the location
+                            $loc = Doctrine_Core::getTable( 'Location' )->findOneByName( 'QuickAdd-Dummy-Location' );
+                            
+                            if( !$loc )
+                            {
+                                $loc = new Location();
+                                $loc['name']      = 'QuickAdd-Dummy-Location';
+                                $loc['shortname'] = 'qa-dummy-loc';
+                                $loc->save();
+                            }
+                            
+                            $cab = new Cabinet();
+                            $cab['locationid'] = $loc['id'];
+                            $cab['name'] = 'QuickAdd-Dummy-Cabinet';
+                            $cab->save();
+                        }
+                        
+                        // get the vendor 
+                        $vendor = Doctrine_Core::getTable( 'Vendor' )->findOneByName( 'QuickAdd-Dummy-Vendor' );
+                            
+                        if( !$vendor )
+                        {
+                            $vendor = new Vendor();
+                            $vendor['name'] = 'QuickAdd-Dummy-Vendor';
+                            $vendor->save();
+                        }
+                            
+                        $s = new SwitchTable();
+                        $s['name']       = 'QuickAdd-Dummy-Switch';
+                        $s['cabinetid']  = $cab['id'];
+                        $s['switchtype'] = SwitchTable::SWITCHTYPE_SWITCH;
+                        $s['model']      = 'DUMMY';
+                        $s['vendorid']   = $vendor['id'];
+                        $s->save();
+                    }
+                    
+                    // and we need a port
+                    $sp             = new Switchport();
+                    $sp['switchid'] = $s['id'];
+                    $sp['type']     = Switchport::TYPE_PEERING;
+                    $sp['name']     = "DUMMY-{$c['shortname']}";
+                    $sp->save();
+                    
+                    
+                    // and now a physical interface
+                    $pi                       = new Physicalinterface();
+                    $pi['switchportid']       = $sp['id'];
+                    $pi['virtualinterfaceid'] = $vi['id'];
+                    $pi['status']             = Physicalinterface::STATUS_CONNECTED;
+                    $pi['speed']              = 1000;
+                    $pi['duplex']             = 'full';
+                    $pi['monitorindex']       = 1;
+                    $pi->save();
+                    
+                    
+                    // and lastly, the VLAN interface
+                    $vli = new Vlaninterface();
+                    
+                    $vli['virtualinterfaceid'] = $vi['id'];
+                    $vli['vlanid']             = $vlan['id'];
+                    $vli['ipv4enabled']        = $ipv4;
+                    
+                    if( $ipv4 )
+                        $vli['ipv4addressid']  = $ipv4addr['id'];
+                        
+                    $vli['ipv4hostname']       = $f->getValue( 'ipv4hostname' );
+                    $vli['ipv6enabled']        = $ipv6;
+                    
+                    if( $ipv6 )
+                        $vli['ipv6addressid']  = $ipv6addr['id'];
+
+                    $vli['ipv6hostname']       = $f->getValue( 'ipv6hostname' );
+                    $vli['bgpmd5secret']       = $f->getValue( 'ipv4bgpmd5secret' );
+                    $vli['ipv4bgpmd5secret']   = $f->getValue( 'ipv4bgpmd5secret' );
+                    $vli['ipv6bgpmd5secret']   = $f->getValue( 'ipv6bgpmd5secret' );
+                    $vli['maxbgpprefix']       = $f->getValue( 'maxprefixes' );
+                    $vli['rsclient']           = 1;
+                    
+                    $vli->save();
+                    
+                    $conn->commit();
+                }
+                catch( Exceltion $e )
+                {
+                    $conn->rollback();
+                }
+                
+                
+                
+            }while( false );
+        }
+
+        $this->view->form   = $f->render( $this->view );
+
+        $this->view->display( 'customer' . DIRECTORY_SEPARATOR . 'quick-add.tpl' );
+    }
 
 
 }
