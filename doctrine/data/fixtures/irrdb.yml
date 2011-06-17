@@ -1,0 +1,47 @@
+Irrdbconfig:
+    irr1:                                                                                                                                                                               
+        host: whois.ripe.net
+        protocol: irrd
+        source: RADB
+        notes: RADB Query from RADB Database
+    irr2:
+        host: whois.apnic.net
+        protocol: ripe
+        source: APNIC
+        notes: APNIC Query from APNIC Database
+    irr3:
+        host: whois.radb.net
+        protocol: irrd
+        source: RADB
+        notes: RADB Query from RADB Database
+    irr4:
+        host: whois.lacnic.net
+        protocol: ripe
+        source: LACNIC
+        notes: LACNIC Query from LACNIC Database
+    irr5:
+        host: rr.level3.net
+        protocol: ripe
+        source: LEVEL3
+        notes: Level3 Query from Level3 Database
+    irr6:
+        host: whois.radb.net
+        protocol: irrd
+        source: ARIN
+        notes: ARIN Query from RADB Database
+    irr7:
+        host: whois.radb.net 
+        protocol: irrd
+        source: RADB,ARIN
+        notes: RADB+ARIN Query from RADB Database
+    irr8:
+        host: whois.radb.net
+        protocol: irrd
+        source: ALTDB
+        notes: ALTDB Query from RADB Database
+    irr9:
+        host: whois.radb.net
+        protocol: irrd
+        source: RADB,RIPE
+        notes: RADB+RIPE Query from RADB Database
+
