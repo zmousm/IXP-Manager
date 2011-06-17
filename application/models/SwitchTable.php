@@ -61,5 +61,57 @@ class SwitchTable extends BaseSwitch
                 )
                 );
     }
+    
+    
+    
+    public static function getDummySwitch()
+    {
+        $s = Doctrine_Core::getTable( 'SwitchTable' )->findOneByName( 'QuickAdd-Dummy-Switch' );
+        
+        if( !$s )
+        {
+            // get the cabinet
+            $cab = Doctrine_Core::getTable( 'Cabinet' )->findOneByName( 'QuickAdd-Dummy-Cabinet' );
+            
+            if( !$cab )
+            {
+                // get the location
+                $loc = Doctrine_Core::getTable( 'Location' )->findOneByName( 'QuickAdd-Dummy-Location' );
+                
+                if( !$loc )
+                {
+                    $loc = new Location();
+                    $loc['name']      = 'QuickAdd-Dummy-Location';
+                    $loc['shortname'] = 'qa-dummy-loc';
+                    $loc->save();
+                }
+                
+                $cab = new Cabinet();
+                $cab['locationid'] = $loc['id'];
+                $cab['name'] = 'QuickAdd-Dummy-Cabinet';
+                $cab->save();
+            }
+            
+            // get the vendor 
+            $vendor = Doctrine_Core::getTable( 'Vendor' )->findOneByName( 'QuickAdd-Dummy-Vendor' );
+                
+            if( !$vendor )
+            {
+                $vendor = new Vendor();
+                $vendor['name'] = 'QuickAdd-Dummy-Vendor';
+                $vendor->save();
+            }
+                
+            $s = new SwitchTable();
+            $s['name']       = 'QuickAdd-Dummy-Switch';
+            $s['cabinetid']  = $cab['id'];
+            $s['switchtype'] = SwitchTable::SWITCHTYPE_SWITCH;
+            $s['model']      = 'DUMMY';
+            $s['vendorid']   = $vendor['id'];
+            $s->save();
+        }
+        
+        return $s;
+    }
 
 }

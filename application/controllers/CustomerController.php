@@ -608,7 +608,7 @@ END_JSON;
     public function quickAddAction()
     {
         
-        $f = new INEX_Form_Customer_QuickAdd( null, false, $cancelLocation );
+        $f = new INEX_Form_Customer_QuickAdd( null, false, '/customer/list' );
 
         // Process a submitted form if it passes initial validation
         if( $this->inexGetPost( 'commit' ) !== null && $f->isValid( $_POST ) )
@@ -815,6 +815,11 @@ END_JSON;
                     $vli->save();
                     
                     $conn->commit();
+                    
+                    $this->logger->notice( 'New \'Quick Add\' interface created' );
+                    $this->session->message = new INEX_Message( "New customer and interface added", "success" );
+                    $this->_redirect( 'customer/list' );
+                    
                 }
                 catch( Exceltion $e )
                 {

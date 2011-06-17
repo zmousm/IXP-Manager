@@ -28,7 +28,7 @@
 class INEX_Form_Customer_QuickAdd extends INEX_Form
 {
 
-    public function __construct( $options = null, $isEdit = false )
+    public function __construct( $options = null, $isEdit = false, $cancelLocation )
     {
         parent::__construct( $options );
 
@@ -279,7 +279,7 @@ class INEX_Form_Customer_QuickAdd extends INEX_Form
     
     
         
-        $this->addElement( 'button', 'cancel', array( 'label' => 'Cancel', 'onClick' => "parent.location='" . Zend_Controller_Front::getInstance()->getBaseUrl() . "/customer/list'" ) );
+        $this->addElement( 'button', 'cancel', array( 'label' => 'Cancel', 'onClick' => "parent.location='" . Zend_Controller_Front::getInstance()->getBaseUrl() . "{$cancelLocation}'" ) );
 
         $this->addElement( 'submit', 'commit', array( 'label' => 'Add New Customer' ) );
 
