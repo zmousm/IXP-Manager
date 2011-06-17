@@ -135,7 +135,6 @@ class INEX_Controller_Action extends Zend_Controller_Action
 
             $this->view->basepath   = Zend_Controller_Front::getInstance()->getBaseUrl();
 
-
             $this->auth             = $this->_bootstrap->getResource( 'auth' );
 
             if( $this->auth->hasIdentity() )

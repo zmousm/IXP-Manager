@@ -38,8 +38,8 @@
  */
 function smarty_function_genUrl( $params, &$smarty )
 {
-    $url = $smarty->_tpl_vars['pagebase'];
-        
+    $url = '/ixp';
+
     if( isset( $params['controller'] ) )
     {
         $url .= "/{$params['controller']}";

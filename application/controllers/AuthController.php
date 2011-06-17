@@ -129,45 +129,45 @@ class AuthController extends INEX_Controller_Action
             // does the username exist?
             if( $user = Doctrine_Core::getTable( 'User' )->findOneByUsername( $this->getRequest()->getParam( 'loginusername' ) ) )
             {
-                // sanity checks
-                if( is_numeric( $user->authorisedMobile ) && strlen( $user->authorisedMobile ) > 10 )
-                {
-                    $sms = new INEX_SMS_Clickatell(
-                        $this->config['sms']['clickatell']['username'],
-                        $this->config['sms']['clickatell']['password'],
-                        $this->config['sms']['clickatell']['api_id'],
-                        $this->config['sms']['clickatell']['sender_id']
-                    );
 
-                    if( $sms->send( $user->authorisedMobile, "Your " . $this->_config['identity']['orgname']
-                            . " Members' area password is:\n\n" . $user->password . "\n" ) )
-                    {
-                        $this->view->message = new INEX_Message(
-                            'Your password has been sent to the authorised mobile ('
-                                . substr( $user->authorisedMobile, 0, 6 )
-                                . str_repeat( 'x', strlen( $user->authorisedMobile ) - 8 )
-                                . substr( $user->authorisedMobile, -2 ),
-                            'success'
-                        );
+                $mail = new Zend_Mail();
+                $mail->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] )
+                     ->setSubject( 'Your password for ' . $this->config['identity']['ixp']['fullname'] )
+                     ->setType( Zend_Mime::MULTIPART_RELATED )
+                     ->addTo( $user->email );
 
-                        $this->view->display( 'auth/login.tpl' );
-                        return true;
-                    }
-                    else
-		            {
-		                $this->view->message = new INEX_Message(
-		                	'We could not send the password by SMS due to an issue with our SMS provider. '
-		                    . 'Please contact us on ' . $this->_config['identity']['email'] . '.', 'error' );
-		            }
-                }
-                else
-                {
+                $ixp_logo = $mail->createAttachment(
+                    file_get_contents( $this->config['identity']['ixp']['logo'] ),
+                    "image/jpg",
+                    Zend_Mime::DISPOSITION_INLINE,
+                    Zend_Mime::ENCODING_BASE64,
+                    'ixp-logo.jpg'
+                );
+                $ixp_logo->id = 'ixp_logo';
+
+                $this->view->user = $user;
+                $mail->setBodyHtml( $this->view->render( 'auth/mail/password.tpl' ) );
+
+                try 
+                { 
+                    $mail->send(); 
+                    
                     $this->view->message = new INEX_Message(
-                        'We could not send the password by SMS as we do not have an authorised mobile number on file. '
-                        . 'Please contact us on <em>' . $this->_config['identity']['email'] . '</em> from an official '
-                        . 'company email address to provide a mobile number.', 'alert'
+                        'Your password has been emailed to you',
+                        'success'
                     );
                 }
+                catch( Zend_Mail_Exception $e ) 
+                { 
+                    $this->view->message = new INEX_Message(
+                        'Your password could NOT be emailed to you. Please contact us for help',
+                        'error'
+                    );
+                }
+        
+
+                $this->view->display( 'auth/login.tpl' );
+                return true;
             }
             else
             {
