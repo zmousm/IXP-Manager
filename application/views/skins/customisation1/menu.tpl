@@ -78,10 +78,7 @@
                 {if $identity.user.privs neq 1}
                     [null,'Profile','{genUrl controller="profile"}',null,'Profile'],
                 {else}
-                    [null,'Profile','{genUrl controller="profile"}',null,'Profile',
-                        ['<img src="{genUrl}/images/joomla-admin/menu/controlpanel.png" />', 'SEC Event Notifications',  '{genUrl controller="dashboard" action="sec-event-email-config"}',
-                            null, 'SEC Event Notifications'   ]
-                    ],
+                    [null,'Profile','{genUrl controller="profile"}',null,'Profile'],
                 {/if}
                 {if isset( $session->switched_user_from ) and $session->switched_user_from}
                     [null,'[Switch Back]','{genUrl controller="auth" action="switch-back"}',null,'[Switch Back]']
