@@ -351,8 +351,8 @@ END_JSON;
 
         $form->getElement( 'cc' )->setValue( implode( ',', $userEmails ) );
 
-        $form->getElement( 'bcc' )->setValue( $this->_config['identity']['email'] );
-        $form->getElement( 'subject' )->setValue( $this->_config['identity']['name'] . ' :: Welcome Mail' );
+        $form->getElement( 'bcc' )->setValue( $this->config['identity']['email'] );
+        $form->getElement( 'subject' )->setValue( $this->config['identity']['name'] . ' :: Welcome Mail' );
 
         // Let's get the information we need for the welcome mail from the database.
 
