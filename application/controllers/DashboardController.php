@@ -479,7 +479,8 @@ class DashboardController extends INEX_Controller_Action
 
     public function rsInfoAction()
     {
-        $this->view->rsEnabled = $this->customer->isRouteServerClient(  $this->config['primary_peering_lan']['vlan_tag'] );
+        if( $this->customer )
+            $this->view->rsEnabled = $this->customer->isRouteServerClient(  $this->config['primary_peering_lan']['vlan_tag'] );
 
         $this->view->display( 'dashboard' . DIRECTORY_SEPARATOR . 'rs-info.tpl' );
     }

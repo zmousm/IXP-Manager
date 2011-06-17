@@ -160,6 +160,7 @@ class CustAdminController extends INEX_Controller_Action
             $form->addElements( $elements );
         }
 
+        $form->removeElement( 'authorisedMobile' );
         $form->removeElement( 'privs' );
         $form->removeElement( 'custid' );
         $form->removeElement( 'password' );
@@ -209,6 +210,7 @@ class CustAdminController extends INEX_Controller_Action
 
                     if( !$isEdit )
                     {
+                        /*
 	                    $sms_sent = $this->getSMS()->send(
 	                                    $u->authorisedMobile,
 	                                    "Your " . $this->_config['identity']['orgname']
@@ -217,7 +219,8 @@ class CustAdminController extends INEX_Controller_Action
 	                                        . ") password is:\n\n"
 	                                        . $u->password . "\n"
 	                                );
-
+						*/
+                        
 	                    $mail = new Zend_Mail();
 	                    $mail->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] )
 	                         ->setSubject( 'Access details for ' . $this->config['identity']['ixp']['fullname'] )
@@ -243,13 +246,14 @@ class CustAdminController extends INEX_Controller_Action
 
 	                    $this->logger->notice( "New user created by {$this->user->username}: {$u->username}/{$u->email}" );
 
-	                    if( $mail_sent && $sms_sent )
-	                    {
+	                    //if( $mail_sent && $sms_sent )
+	                    //{
 	                        $this->session->message = new INEX_Message(
-	                            "New user {$u->username} created. A welcome email has been sent and the user's password has been delivered by SMS text message",
-	                            INEX_Message::MESSAGE_TYPE_SUCCESS
+	                            "New user {$u->username} created. A welcome email has been sent",
+	                            // "New user {$u->username} created. A welcome email has been sent and the user's password has been delivered by SMS text message",
+	                        INEX_Message::MESSAGE_TYPE_SUCCESS
 	                        );
-	                    }
+	                    /* }
 	                    else if( !$mail_sent && !$sms_sent )
 	                    {
 	                        $this->session->message = new INEX_Message(
@@ -270,7 +274,7 @@ class CustAdminController extends INEX_Controller_Action
 	                            "New user {$u->username} created. A welcome email could not be sent but the password has been delivered via SMS text message",
 	                            INEX_Message::MESSAGE_TYPE_ALERT
 	                        );
-	                    }
+	                    } */
 
                     }
                     else
