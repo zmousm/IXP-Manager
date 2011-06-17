@@ -52,28 +52,6 @@
                     ],
                     _cmSplit,
                 {/if}
-                {if $identity.user.privs neq 2}
-                    [null,'Peering',null,null,'Peering',
-                        ['<img src="{genUrl}/images/joomla-admin/menu/joomla_16x16.png" />','Peering Matrices', null, null, 'Peering Matrices',
-
-                            {foreach from=$config.peering_matrix.public key=index item=lan}
-                                ['<img src="{genUrl}/images/joomla-admin/menu/joomla_16x16.png" />',
-                                    '{$lan.name}', '{genUrl controller="dashboard" action="peering-matrix" lan=$index}',
-                                    'ixp_new_window',
-                                    '{$lan.name}'
-                                ],
-                            {/foreach}
-
-                        ],
-                        {if $identity.user.privs eq 1 and $customer->isFullMember()}
-                            ['<img src="{genUrl}/images/joomla-admin/menu/joomla_16x16.png" />',
-                                'My Peering Manager','{genUrl controller="dashboard" action="my-peering-matrix"}',
-                                null, 'My Peering Manager'
-                            ],
-                            {/if}
-                    ],
-                    _cmSplit,
-                {/if}
                 {if $identity.user.privs eq 1 or $identity.user.privs eq 3}
                     [null,'Documentation',null,null,'Documentation',
                         ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','Technical Support',
@@ -100,10 +78,7 @@
                 {if $identity.user.privs neq 1}
                     [null,'Profile','{genUrl controller="profile"}',null,'Profile'],
                 {else}
-                    [null,'Profile','{genUrl controller="profile"}',null,'Profile',
-                        ['<img src="{genUrl}/images/joomla-admin/menu/controlpanel.png" />', 'SEC Event Notifications',  '{genUrl controller="dashboard" action="sec-event-email-config"}',
-                            null, 'SEC Event Notifications'   ]
-                    ],
+                    [null,'Profile','{genUrl controller="profile"}',null,'Profile'],
                 {/if}
                 {if isset( $session->switched_user_from ) and $session->switched_user_from}
                     [null,'[Switch Back]','{genUrl controller="auth" action="switch-back"}',null,'[Switch Back]']
