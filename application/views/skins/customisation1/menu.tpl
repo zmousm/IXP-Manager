@@ -15,6 +15,22 @@
                 {/if}
                 _cmSplit,
                 {if $identity.user.privs eq 3}
+                [null,'Super User',null,null,'Super User',
+                     ['<img src="{genUrl}/images/joomla-admin/menu/globe4.png" />',     'Locations',            '{genUrl controller="location"}',
+                                     null,'Locations' ],
+                     ['<img src="{genUrl}/images/joomla-admin/menu/cabinets.png" />',   'Cabinets',             '{genUrl controller="cabinet"}',
+                                     null,'Cabinets'  ],
+                     ['<img src="{genUrl}/images/joomla-admin/menu/switch.png" />',     'Switches',             '{genUrl controller="switch"}',
+                                     null,'Switches',
+                         ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />',  'Switch Ports',  '{genUrl controller="switch-port"}',
+                             null,'Switch Ports'   ]
+                     ],
+                     ['<img src="{genUrl}/images/joomla-admin/menu/vendors.png" />',    'Vendors',              '{genUrl controller="vendor"}',
+                                     null,'Vendors'   ],
+                     ['<img src="{genUrl}/images/joomla-admin/menu/vlan.png" />',       'VLANs',                '{genUrl controller="vlan"}',
+                                     null, 'VLANs'   ]
+                     ],
+                 _cmSplit,
                     [null,'Admin',null,null,'Admin',
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/users.png" />','Members',  '{genUrl controller="customer"}',
 	                                    null,'Members'   ],
