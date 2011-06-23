@@ -210,17 +210,6 @@ class CustAdminController extends INEX_Controller_Action
 
                     if( !$isEdit )
                     {
-                        /*
-	                    $sms_sent = $this->getSMS()->send(
-	                                    $u->authorisedMobile,
-	                                    "Your " . $this->_config['identity']['orgname']
-	                                        . " IXP Manager ("
-	                                        . $this->_config['identity']['ixp']['url']
-	                                        . ") password is:\n\n"
-	                                        . $u->password . "\n"
-	                                );
-						*/
-                        
 	                    $mail = new Zend_Mail();
 	                    $mail->setFrom( $this->config['identity']['email'], $this->config['identity']['name'] )
 	                         ->setSubject( 'Access details for ' . $this->config['identity']['ixp']['fullname'] )
@@ -246,6 +235,7 @@ class CustAdminController extends INEX_Controller_Action
 
 	                    $this->logger->notice( "New user created by {$this->user->username}: {$u->username}/{$u->email}" );
 
+<<<<<<< HEAD
 	                    //if( $mail_sent && $sms_sent )
 	                    //{
 	                        $this->session->message = new INEX_Message(
@@ -267,11 +257,19 @@ class CustAdminController extends INEX_Controller_Action
 	                            "New user {$u->username} created. A welcome email has been sent but there was an error delivering by SMS text message - please contact " . $this->_config['identity']['email'],
 	                            INEX_Message::MESSAGE_TYPE_ALERT
 	                        );
+=======
+	                    if( $mail_sent )
+	                    {
+	                        $this->session->message = new INEX_Message(
+	                            "New user {$u->username} created. A welcome email has been sent to the new user.",
+	                            INEX_Message::MESSAGE_TYPE_SUCCESS
+	                        );
+>>>>>>> nf-userfilter
 	                    }
 	                    else
 	                    {
 	                        $this->session->message = new INEX_Message(
-	                            "New user {$u->username} created. A welcome email could not be sent but the password has been delivered via SMS text message",
+	                            "New user {$u->username} created. A welcome email could not be sent.",
 	                            INEX_Message::MESSAGE_TYPE_ALERT
 	                        );
 	                    } */
