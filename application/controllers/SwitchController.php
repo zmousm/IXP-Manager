@@ -130,38 +130,96 @@ class SwitchController extends INEX_Controller_FrontEnd
     {
         $switch = Doctrine_Core::getTable( 'SwitchTable' )->find( $this->_getParam( 'id' ) );
 
-        if( !$switch )
+        if( $switch )
         {
-            $this->view->message = new INEX_Message( 'Invalid switch', INEX_Message::MESSAGE_TYPE_ERROR );
-            return( $this->_forward( 'list' ) );
+            $this->view->switchid = $switch['id'];
+
+            // load switch ports
+            $ports = Doctrine_Query::create()
+                ->from( 'Switchport sp' )
+                ->where( 'sp.switchid = ?', $switch['id'] )
+                ->orderBy( 'sp.id ASC' )
+                ->execute( null, Doctrine_Core::HYDRATE_ARRAY );
+    
+            // add in customer details.
+            // FIXME: there a better way of doing this
+            foreach( $ports as $i => $p )
+            {
+                $ports[$i]['connection'] = Doctrine_Query::create()
+                    ->from( 'Physicalinterface p' )
+                    ->leftJoin( 'p.Virtualinterface v' )
+                    ->leftJoin( 'v.Cust c' )
+                    ->where( 'p.switchportid = ?', $p['id'] )
+                    ->fetchOne( null, Doctrine_Core::HYDRATE_ARRAY );
+    
+                $ports[$i]['type'] = Switchport::$TYPE_TEXT[ $p['type'] ];
+            }
         }
+        else
+            $ports = array();
 
-        // load switch ports
-        $ports = Doctrine_Query::create()
-            ->from( 'Switchport sp' )
-            ->where( 'sp.switchid = ?', $switch['id'] )
-            ->orderBy( 'sp.id ASC' )
-            ->execute( null, Doctrine_Core::HYDRATE_ARRAY );
-
-        // add in customer details.
-        // FIXME: there a better way of doing this
-        foreach( $ports as $i => $p )
-        {
-            $ports[$i]['connection'] = Doctrine_Query::create()
-                ->from( 'Physicalinterface p' )
-                ->leftJoin( 'p.Virtualinterface v' )
-                ->leftJoin( 'v.Cust c' )
-                ->where( 'p.switchportid = ?', $p['id'] )
-                ->fetchOne( null, Doctrine_Core::HYDRATE_ARRAY );
-
-            $ports[$i]['type'] = Switchport::$TYPE_TEXT[ $p['type'] ];
-        }
-
-        //echo '<pre>'; print_r( $ports );die();
-
+        // add switch list
+        $this->view->switches = Doctrine_Query::create()
+            ->from( 'SwitchTable s' )
+            ->select( 's.id, s.name' )
+            ->where( 's.switchtype = ?', SwitchTable::SWITCHTYPE_SWITCH )
+            ->orderBy( 's.name' )
+            ->fetchArray();
+            
         $this->view->ports = $ports;
         $this->view->display( 'switch/port-report.tpl' );
     }
+    
+    
+    
+    public function addPortsAction()
+    {
+        $f = new INEX_Form_SwitchPort_AddPorts( null, false, '' );
+        
+        $f->setAction( Zend_Controller_Front::getInstance()->getBaseUrl() . '/' . $this->getRequest()->getParam( 'controller' ) . "/add-ports" );
+ 
+        if( $this->inexGetPost( 'commit' ) !== null && $f->isValid( $_POST ) )
+        {
+            do
+            {
+                try
+                {
+                    $conn = Doctrine_Manager::connection();
+                    $conn->beginTransaction();
+
+                    for( $i = 0; $i < intval( $_POST['numports'] ); $i++ )
+                    {
+                        $sp = new Switchport();
+                        
+                        $sp['switchid'] = $f->getValue( 'switchid' );
+                        $sp['type']     = intval( $_POST[ 'np_type' . $i ] );
+                        $sp['name']     = trim( stripslashes( $_POST[ 'np_name' . $i ] ) );
+                        
+                        $sp->save();
+                    } 
+                    
+                    $conn->commit();
+                     
+                    $this->logger->notice( intval( $_POST['numports'] ) . ' new switch ports created' );
+                    $this->session->message = new INEX_Message( intval( $_POST['numports'] ) . ' new switch ports created', "success" );
+                    $this->_redirect( 'switch-port/list/switchid/' . $f->getValue( 'switchid' ) );
+                }
+                catch( Exception $e )
+                {
+                    $conn->rollback();
+                    
+                    Zend_Registry::set( 'exception', $e );
+                    return( $this->_forward( 'error', 'error' ) );
+                }
+            }while( false );
+        }
+
+        $this->view->form   = $f->render( $this->view );
+
+        $this->view->display( 'switch-port/add-ports.tpl' );
+    }
+
+    
 }
 
 ?>

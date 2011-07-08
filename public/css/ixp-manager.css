@@ -405,10 +405,11 @@ h4 {
     }
 
 .inputbox {
-    width: 150px;
-    margin: 0 0 1em 0;
-    border: 1px solid #cccccc;
-    }
+    width: 200px;
+    margin: 4px 0 1em 0;
+    padding: 3px;
+    border: 1px solid #4FA500;
+}
 
 .clr {
     clear:both;
@@ -724,7 +725,20 @@ h4 {
 .change_log_item td {
     background-color: #ffeeda;
 }
-    
+
+
+
+
+.list_preamble_container {
+    display: block;
+}
+
+.list_preamble {
+    display: block;
+    text-align: right;
+}
+
+
 
 .meetings {
     margin-left: 20px;
@@ -851,3 +865,18 @@ h4 {
     vertical-align: middle;
 	float: left;
 }
+
+
+
+
+
+
+#documentation
+{
+	font-size: 116%;
+}
+
+#documentation h1 {
+    color: #4FA500;
+}
+

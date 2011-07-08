@@ -14,7 +14,7 @@
             <div align="left">
                 <input type="hidden" name="fpsubmitted" value="1" />
                 <input type="submit" name="submit" class="button" value="Submit" />
-                <a href="{genUrl controller="auth"}">Return to Login Page</a>
+                <a href="{genUrl controller="auth" action="forgotten-username"}">Forgotten Username?</a>
             </div>
         </div>
         </form>
@@ -23,14 +23,17 @@
 
         <div class="ctr"><img src="images/joomla-admin/security.png" width="64" height="64" alt="security" /></div>
         <p>
-            Please enter your username and we will send your password by SMS to the registered mobile number which we have on file.
+            Please enter your username and we will send you a password reset token by email.
         </p>
         <p>
             For help please contact <br />{mailto address='operations@inex.ie' encode='javascript' note='the operations team'}.
         </p>
+        <p>
+        	<a href="{genUrl controller="auth"}">Return to Login Page</a>.
+    	</p>
     </div>
     <div class="clr"></div>
 </div>
 
 
-{tmplinclude file="auth/footer.tpl"}
+{tmplinclude file="footer.tpl"}

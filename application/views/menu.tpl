@@ -37,8 +37,25 @@
                     ['<img src="{genUrl}/images/joomla-admin/menu/switch.png" />',     'Switches',             '{genUrl controller="switch"}',
                                     null,'Switches',
                         ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />',  'Switch Ports',  '{genUrl controller="switch-port"}',
-                            null,'Switch Ports'   ]
+                            null,'Switch Ports'   ],
+	                    ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />',  'Add Ports',  '{genUrl controller="switch" action="add-ports"}',
+    		                null,'Add Ports'   ]
                     ],
+                    
+					['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'IP Addresses', null, null, 'IP Addresses',
+
+                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Add IP Addresses...',
+                      	    '{genUrl controller='ipv4-address' action='add-addresses'}', null, 'Add IP Addresses...'
+   					    ],
+
+   						['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />','IPv4 Addresses',  
+    						'{genUrl controller='ipv4-address' action='list'}', null, 'IPv4  Addresses'
+						],
+						['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />','IPv6 Addresses',  
+							'{genUrl controller='ipv6-address' action='list'}', null, 'IPv6  Addresses'
+						]
+					],
+
                     ['<img src="{genUrl}/images/joomla-admin/menu/connection.png" />', 'Patch Panels',         '{genUrl controller="patch-panel"}',
                                      null,'Patch Panels',
                         ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />',  'Patch Panel Ports',  '{genUrl controller="patch-panel-port"}',
@@ -57,6 +74,8 @@
 	                                    null,'Members'   ],
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />', 'Interfaces', '{genUrl controller="virtual-interface"}', null, 'Interfaces',
 
+		                        ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />','Quick Add...',  '{genUrl controller="vlan-interface" action="quick-add"}',
+                                    null, 'Quick Add...'   ],
 	                            ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />','Physical Interfaces',  '{genUrl controller="physical-interface"}',
 	                                        null, 'Physical Interfaces'   ],
 	                            ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />','Virtual Interfaces',  '{genUrl controller="virtual-interface"}',
@@ -74,44 +93,6 @@
 	                                    null, 'Contacts'   ],
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/system-users.png" />','Users',  '{genUrl controller="user"}',
 	                                    null, 'Users'   ],
-
-	            	    ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'IP Addresses', null, null, 'IP Addresses',
-
-	                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />','IPv4 Addresses',  null, null, 'IPv4  Addresses',
-
-		                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Peering VLAN #1',
-			                        	'{genUrl controller='ipv4-address' action='list' vlan='10'}', null, 'Peering VLAN #1'
-								],
-		                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Peering VLAN #2',
-		                        	'{genUrl controller='ipv4-address' action='list' vlan='12'}', null, 'Peering VLAN #2'
-								],
-		                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'VoIP Peering VLAN #1',
-		                        	'{genUrl controller='ipv4-address' action='list' vlan='70'}', null, 'VoIP Peering VLAN #1'
-								],
-		                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'VoIP Peering VLAN #2',
-		                        	'{genUrl controller='ipv4-address' action='list' vlan='72'}', null, 'VoIP Peering VLAN #2'
-								]
-							],
-
-	                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />','IPv6 Addresses',  null, null, 'IPv6  Addresses',
-
-		                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Peering VLAN #1',
-			                        	'{genUrl controller='ipv6-address' action='list' vlan='10'}', null, 'Peering VLAN #1'
-								],
-		                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Peering VLAN #2',
-		                        	'{genUrl controller='ipv6-address' action='list' vlan='12'}', null, 'Peering VLAN #2'
-								],
-		                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'VoIP Peering VLAN #1',
-		                        	'{genUrl controller='ipv6-address' action='list' vlan='70'}', null, 'VoIP Peering VLAN #1'
-								],
-		                        [ '<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'VoIP Peering VLAN #2',
-		                        	'{genUrl controller='ipv6-address' action='list' vlan='72'}', null, 'VoIP Peering VLAN #2'
-								]
-
-							],
-
- 	                    ],
-
 
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/drive-optical.png" />','Customer Kit',  '{genUrl controller="cust-kit"}',
 	                                    null, 'Customer Kit'   ],
@@ -134,13 +115,10 @@
 	                        ['<img src="{genUrl}/images/joomla-admin/menu/php.png" />','PHP Info',  '{genUrl controller="utils" action="phpinfo"}',
 	                            null, 'PHP Info'   ],
 	                        ['<img src="{genUrl}/images/joomla-admin/menu/php.png" />','APC Info',  '{genUrl controller="utils" action="apcinfo"}',
-	                            null, 'APC Info'   ]
+	                            null, 'APC Info'   ],
+		                    ['<img src="{genUrl}/images/joomla-admin/menu/contents.png" />','SEC Events',  '{genUrl controller="sec-viewer"}',
+	                            null, 'SEC Events'   ]
 	                    ]
-                    ],
-                    _cmSplit,
-                    [null,'Monitoring',null,null,'Monitoring',
-                    ['<img src="{genUrl}/images/joomla-admin/menu/contents.png" />','SEC Events',  '{genUrl controller="sec-viewer"}',
-                                    null, 'SEC Events'   ]
                     ],
                     _cmSplit,
                 {/if}
@@ -285,6 +263,13 @@
                             null, 'SEC Event Notifications'   ]
                     ],
                 {/if}
+                {if $identity.user.privs eq 3}
+                	_cmSplit,
+                    [null, 'Help','{genUrl controller="index" action="help"}',null,'Help'],
+                {/if}
+            	_cmSplit,
+                [null, 'About','{genUrl controller="index" action="about"}',null,'About'],
+                _cmSplit,
                 {if isset( $session->switched_user_from ) and $session->switched_user_from}
                     [null,'[Switch Back]','{genUrl controller="auth" action="switch-back"}',null,'[Switch Back]']
                 {else}

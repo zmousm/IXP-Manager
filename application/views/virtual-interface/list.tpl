@@ -119,7 +119,7 @@
 </style>
 {/literal}
 
-<table width="850" id="centre">
+<table width="900" id="centre">
 <tr>
     <td>
         <div id="autocomplete">
@@ -136,13 +136,13 @@
     <td>
     	<table>
     	<tr>
-            <td>
+    		<td>
                 <form action="{genUrl controller=$controller action='add'}" method="post">
                     <input type="submit" name="submit" class="button" value="Add New" />
                 </form>
-            </td>
-            <td>
-                <form action="{genUrl controller=$controller action='quick-add'}" method="post">
+        	</td>
+        	<td>
+				<form action="{genUrl controller='vlan-interface' action='quick-add'}" method="post">
                     <input type="submit" name="submit" class="button" value="Quick Add" />
                 </form>
             </td>

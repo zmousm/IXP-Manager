@@ -33,11 +33,13 @@ class SwitchPortController extends INEX_Controller_FrontEnd
 {
     public function init()
     {
-        $this->frontend['defaultOrdering'] = 'name';
+        $this->frontend['defaultOrdering'] = 'id';
         $this->frontend['model']           = 'Switchport';
         $this->frontend['name']            = 'SwitchPort';
         $this->frontend['pageTitle']       = 'Switch Ports';
 
+        $this->frontend['pagination']       = false;
+        
         $this->frontend['columns'] = array(
 
             'displayColumns' => array( 'id', 'name', 'type', 'switchid' ),
@@ -46,8 +48,8 @@ class SwitchPortController extends INEX_Controller_FrontEnd
             'viewPanelTitle' => 'name',
 
             'sortDefaults' => array(
-                'column' => 'name',
-                'order'  => 'desc'
+                'column' => 'id',
+                'order'  => 'asc'
             ),
 
             'id' => array(
@@ -81,6 +83,34 @@ class SwitchPortController extends INEX_Controller_FrontEnd
         parent::feInit();
     }
 
+    
+    protected function _preList( $dataQuery )
+    {
+        // load switch names
+        $this->view->switches = Doctrine_Query::create()
+            ->from( 'SwitchTable s' )
+            ->orderBy( 's.name' )
+            ->fetchArray();
+            
+        $this->view->switchid = $this->_getParam( 'switchid', null );
+        
+        // and limit to a single switch
+        return $dataQuery->andWhere( 'x.switchid = ?', $this->_getParam( 'switchid', 0 ) );
+    }
+    
+    /**
+     * Hook function to set a customer return.
+     * 
+     * We want to display the ports of the switch which was added / edited.
+	 *
+     * @param INEX_Form_SwitchPort $f
+     * @param Switchport $o
+     */
+    protected function _addEditSetReturnOnSuccess( $f, $o )
+    {
+        return 'switch-port/list/switchid/' . $o['switchid'];
+    }
+    
 }
 
 ?>

@@ -71,7 +71,7 @@ class VirtualInterfaceController extends INEX_Controller_FrontEnd
 
 
     //addEditPreDisplay
-    function addEditPreDisplay( $form )
+    function addEditPreDisplay( $form, $object )
     {
         // did we get a customer id from the provisioning controller?
         if( $this->_getParam( 'prov_cust_id', false ) )
@@ -321,6 +321,20 @@ END_JSON;
         $this->view->form   = $f->render( $this->view );
 
         $this->view->display( 'virtual-interface' . DIRECTORY_SEPARATOR . 'quick-add.tpl' );
+
+    }
+    
+    /**
+     * Hook function to set a customer return.
+     * 
+     * We want to display the virtual interface which was added / edited.
+	 *
+     * @param INEX_Form_SwitchPort $f
+     * @param Switchport $o
+     */
+    protected function _addEditSetReturnOnSuccess( $f, $o )
+    {
+        return 'virtual-interface/edit/id/' . $o['id'];
     }
     
 
