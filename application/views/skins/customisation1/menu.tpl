@@ -42,15 +42,8 @@
 						]
 					],
 
-                    ['<img src="{genUrl}/images/joomla-admin/menu/connection.png" />', 'Patch Panels',         '{genUrl controller="patch-panel"}',
-                                     null,'Patch Panels',
-                        ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />',  'Patch Panel Ports',  '{genUrl controller="patch-panel-port"}',
-                            null,'Patch Panel Ports'   ]
-                    ],
                     ['<img src="{genUrl}/images/joomla-admin/menu/vendors.png" />',    'Vendors',              '{genUrl controller="vendor"}',
                                     null,'Vendors'   ],
-                    ['<img src="{genUrl}/images/joomla-admin/menu/console.png" />',    'Console Connections',  '{genUrl controller="console-server-connection"}',
-                                    null,'Console Connections'   ],
                     ['<img src="{genUrl}/images/joomla-admin/menu/vlan.png" />',       'VLANs',                '{genUrl controller="vlan"}',
                                     null, 'VLANs'   ]
                     ],
@@ -68,7 +61,6 @@
 	                                        null, 'Virtual Interfaces'   ],
 	                            ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />','VLAN Interfaces',  '{genUrl controller="vlan-interface"}',
 	                                        null, 'VLAN Interfaces'   ]
-
 	                    ],
                         ['<img src="{genUrl}/images/joomla-admin/menu/install.png" />', 'Provisioning', null, null, 'Provisioning',
 
