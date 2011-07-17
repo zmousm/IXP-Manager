@@ -103,7 +103,6 @@ class VirtualInterfaceController extends INEX_Controller_FrontEnd
 	        ->where( 'vi.id = ?', $this->getRequest()->getParam( 'id' ) );
 
         $this->view->vlanInts = $dataQuery2->execute();
-
     }
 
 

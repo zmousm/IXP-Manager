@@ -71,7 +71,7 @@
 
 <div class="yui-g" style="height: 600px">
 
-<script type="text/javascript" src="/ixp/js/virtual-interface-list.js"></script>
+<script type="text/javascript" src="{genUrl}/js/virtual-interface-list.js"></script>
 
 <table class="adminheading" border="0">
 <tr>
