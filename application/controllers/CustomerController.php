@@ -624,6 +624,7 @@ END_JSON;
                     break;
                 }
                 
+                /*
                 // get the default vlan
                 $vlan = Doctrine_Core::getTable( 'Vlan' )->find( 1 );
                 
@@ -678,6 +679,7 @@ END_JSON;
                     }
                 }
                 
+                */
                 
                 // create the entities
                 $conn = Doctrine_Manager::connection();
@@ -717,7 +719,8 @@ END_JSON;
                     $u['privs']    = User::AUTH_CUSTADMIN;
                     $u['creator']  = $this->user['username'];
                     $u->save();
-                    
+
+                    /*
                     // virtual interface
                     $vi = new Virtualinterface();
                     $vi['custid'] = $c['id'];
@@ -814,10 +817,12 @@ END_JSON;
                     
                     $vli->save();
                     
+                    */
+                    
                     $conn->commit();
                     
-                    $this->logger->notice( 'New \'Quick Add\' interface created' );
-                    $this->session->message = new INEX_Message( "New customer and interface added", "success" );
+                    $this->logger->notice( 'New \'Quick Add\' customer created' );
+                    $this->session->message = new INEX_Message( "New customer added", "success" );
                     $this->_redirect( 'customer/list' );
                     
                 }

@@ -166,7 +166,7 @@ class INEX_Form_Customer_QuickAdd extends INEX_Form
         
 
 
-        
+        /*
         
         
         $ipv4enabled = $this->createElement( 'checkbox', 'ipv4enabled' );
@@ -274,7 +274,7 @@ class INEX_Form_Customer_QuickAdd extends INEX_Form
 
 
 
-
+		*/
     
     
     
