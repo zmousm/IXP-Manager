@@ -54,7 +54,7 @@ class INEX_Form_QuickAddInterface extends INEX_Form
 
         foreach( $dbCusts as $c )
         {
-            $custs[ $c['id'] ] = "{$c['name']}";
+            $custs[ $c['id'] ] = "{$c['name']} [ASN{$c['autsys']}]";
             if( $c['id'] > $maxId ) $maxId = $c['id'];
         }
 
@@ -280,7 +280,15 @@ class INEX_Form_QuickAddInterface extends INEX_Form
             ->setErrorMessages( array( 'Please select a IPv6 address' ) );
         $this->addElement( $ipv6addressid );
         
+        $ipv6address = $this->createElement( 'text', 'ipv6address' );
+        $ipv6address->addValidator( 'stringLength', false, array( 9, 39 ) )
+            ->setLabel( 'IPv6 Address' )
+            ->setAttrib( 'size', 60 )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( new INEX_Filter_StripSlashes() );
 
+        $this->addElement( $ipv6address  );
+        
         $ipv6hostname = $this->createElement( 'text', 'ipv6hostname' );
         $ipv6hostname->addValidator( 'stringLength', false, array( 1, 64 ) )
             ->setLabel( 'IPv6 Hostname' )
@@ -311,7 +319,7 @@ class INEX_Form_QuickAddInterface extends INEX_Form
         
         $this->addDisplayGroup(
             array( 
-            	'ipv6enabled', 'ipv6addressid', 'ipv6hostname', 'ipv6bgpmd5secret', 
+            	'ipv6enabled', 'ipv6addressid', 'ipv6address', 'ipv6hostname', 'ipv6bgpmd5secret', 
             	'ipv6canping', 'ipv6monitorrcbgp' 
             ),
         	'ipv6DisplayGroup'

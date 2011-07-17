@@ -73,11 +73,6 @@
         		    <input type="submit" name="submit" class="button" value="Add New" />
 		        </form>
             </td>
-            <td>
-                <form action="{genUrl controller=$controller action='quick-add'}" method="post">
-                    <input type="submit" name="submit" class="button" value="Quick Add" />
-                </form>
-            </td>
         </tr>
         </table>
 	</td>
