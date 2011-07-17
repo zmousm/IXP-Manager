@@ -306,6 +306,40 @@ class VlanInterfaceController extends INEX_Controller_FrontEnd
                     break;
                 }
                 
+                // check that an IPv6 address was either selected or entered - not neither or or both!
+                if( $this->_getParam( 'ipv6enabled' ) == 1 && $this->_getParam( 'ipv6address' ) == '' && $this->_getParam( 'ipv6addressid' ) == '' )
+                {
+                    $f->getElement( 'ipv6address' )->addError( 'Choose an IPv6 address or enter one' );
+                    $f->getElement( 'ipv6addressid' )->addError( 'Choose an IPv6 address or enter one' );
+                    break;
+                }
+                
+                if( $f->getValue( 'ipv6address' ) != '' && $f->getValue( 'ipv6addressid' ) != '' )
+                {
+                    $f->getElement( 'ipv6address' )->addError( 'Either choose an IPv6 address or enter one - not both' );
+                    $f->getElement( 'ipv6addressid' )->addError( 'Either choose an IPv6 address or enter one - not both' );
+                    break;
+                }
+                
+                // if an IPv6 address was entered, then add it if it doesn't already exist
+                if( $f->getValue( 'ipv6address' ) != '' )
+                {
+                    if( Doctrine::getTable( 'Ipv6address' )->findOneByAddress( $f->getValue( 'ipv6address' ) ) )
+                    {
+                        $f->getElement( 'ipv6address' )->addError( 'Address already exists in database - select it from the dropdown if unused' );
+                        break;
+                    }
+                    else 
+                    {
+                        $ipv6 = new Ipv6address();
+                        $ipv6['address'] = $f->getValue( 'ipv6address' );
+                        $ipv6['vlanid'] = $f->getValue( 'vlanid' );
+                        $ipv6->save();
+                        
+                        $f->getElement( 'ipv6addressid' )->setValue( $ipv6['id'] );
+                    }
+                }
+                                    
                 // create the entities
                 $conn = Doctrine_Manager::connection();
                 $conn->beginTransaction();
@@ -318,7 +352,7 @@ class VlanInterfaceController extends INEX_Controller_FrontEnd
                     $vi->save();
                     
                     // and now a physical interface
-                    $pi                       = new Physicalinterface();
+                    $pi = new Physicalinterface();
                     
                     $f->assignFormToModel( $pi, $this, false );
 

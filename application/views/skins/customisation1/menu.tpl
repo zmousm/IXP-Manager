@@ -62,29 +62,9 @@
 	                            ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />','VLAN Interfaces',  '{genUrl controller="vlan-interface"}',
 	                                        null, 'VLAN Interfaces'   ]
 	                    ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/install.png" />', 'Provisioning', null, null, 'Provisioning',
-
-                            ['<img src="{genUrl}/images/joomla-admin/menu/interface.png" />','New Interface',  '{genUrl controller="provision" action="interface"}',
-                                     null, 'New Interface'   ]
-                        ],
-	                    ['<img src="{genUrl}/images/joomla-admin/menu/kontact.png" />','Contacts',  '{genUrl controller="contact"}',
-	                                    null, 'Contacts'   ],
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/system-users.png" />','Users',  '{genUrl controller="user"}',
 	                                    null, 'Users'   ],
 
-	                    ['<img src="{genUrl}/images/joomla-admin/menu/drive-optical.png" />','Customer Kit',  '{genUrl controller="cust-kit"}',
-	                                    null, 'Customer Kit'   ],
-	                    ['<img src="{genUrl}/images/joomla-admin/menu/meetings.png" />','Meetings',  '{genUrl controller="meeting"}',
-	                                    null, 'Meetings',
-	                        ['<img src="{genUrl}/images/joomla-admin/menu/meetings.png" />', 'Add / Edit',  '{genUrl controller="meeting"}',
-	                            null, 'Add / Edit'   ],
-	                        ['<img src="{genUrl}/images/joomla-admin/menu/meetings.png" />', 'Presentations',  '{genUrl controller="meeting-item"}',
-	                            null, 'Presentations'   ],
-	                        ['<img src="{genUrl}/images/joomla-admin/menu/meetings.png" />', 'Member View',  '{genUrl controller="meeting" action="read"}',
-	                                null, 'Member View'   ],
-	                        ['<img src="{genUrl}/images/joomla-admin/menu/meetings.png" />', 'Instructions',  '{genUrl controller="admin" action="static" page="instructions-meetings"}',
-	                                null, 'Instructions'   ]
-	                    ],
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/contents.png" />','Change Log',  '{genUrl controller="change-log"}',
 	                                    null, 'Change Log'   ],
 	                    ['<img src="{genUrl}/images/joomla-admin/menu/config.png" />','IRRDB Config',  '{genUrl controller="irrdb-config"}',
@@ -93,9 +73,7 @@
 	                        ['<img src="{genUrl}/images/joomla-admin/menu/php.png" />','PHP Info',  '{genUrl controller="utils" action="phpinfo"}',
 	                            null, 'PHP Info'   ],
 	                        ['<img src="{genUrl}/images/joomla-admin/menu/php.png" />','APC Info',  '{genUrl controller="utils" action="apcinfo"}',
-	                            null, 'APC Info'   ],
-		                    ['<img src="{genUrl}/images/joomla-admin/menu/contents.png" />','SEC Events',  '{genUrl controller="sec-viewer"}',
-	                            null, 'SEC Events'   ]
+	                            null, 'APC Info'   ]
 	                    ]
                     ],
                     _cmSplit,
@@ -104,67 +82,14 @@
                     [null,'Member Information',null,null,'Member Information',
                         ['<img src="{genUrl}/images/joomla-admin/menu/switch.png" />','Switch Configuration','{genUrl controller="dashboard" action="switch-configuration"}',null,'Switch Configuration'],
                         ['<img src="{genUrl}/images/joomla-admin/menu/users.png" />','Member Details','{genUrl controller="dashboard" action="members-details-list"}',null,'Member Details'],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/meetings.png" />','Meetings','{genUrl controller="meeting" action="read"}',null,'Meetings'],
-                        {if $identity.user.privs eq 1}
-                            ['<img src="{genUrl}/images/joomla-admin/menu/controlpanel.png" />',
-                                'SEC Event Log', '{genUrl controller="sec-viewer" action="read"}', null,
-                                'SEC Event Log'
-                            ]
-                        {/if}
-                    ],
-                    _cmSplit,
-                {/if}
-                {if $identity.user.privs neq 2}
-                    [null,'Peering',null,null,'Peering',
-                        ['<img src="{genUrl}/images/joomla-admin/menu/joomla_16x16.png" />','Peering Matrices', null, null, 'Peering Matrices',
-
-                            {foreach from=$config.peering_matrix.public key=index item=lan}
-                                ['<img src="{genUrl}/images/joomla-admin/menu/joomla_16x16.png" />',
-                                    '{$lan.name}', '{genUrl controller="dashboard" action="peering-matrix" lan=$index}',
-                                    'ixp_new_window',
-                                    '{$lan.name}'
-                                ],
-                            {/foreach}
-
-                        ],
-                        {if $identity.user.privs eq 1 and $customer->isFullMember()}
-                            ['<img src="{genUrl}/images/joomla-admin/menu/joomla_16x16.png" />',
-                                'My Peering Manager','{genUrl controller="dashboard" action="my-peering-matrix"}',
-                                null, 'My Peering Manager'
-                            ],
-                            {/if}
                     ],
                     _cmSplit,
                 {/if}
                 {if $identity.user.privs eq 1 or $identity.user.privs eq 3}
                     [null,'Documentation',null,null,'Documentation',
-                        ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','Fees and Charges',
-                            '{genUrl controller="dashboard" action="static" page="fees"}',
-                            null, 'Fees and Charges'
-                        ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','Equipment Housing',
-                            '{genUrl controller="dashboard" action="static" page="housing"}',
-                            null, 'Equipment Housing'
-                        ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','Miscellaneous Benefits',
-                            '{genUrl controller="dashboard" action="static" page="misc-benefits"}',
-                            null, 'Miscellaneous Benefits'
-                        ],
                         ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','Technical Support',
                             '{genUrl controller="dashboard" action="static" page="support"}',
                             null, 'Technical Support'
-                        ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','Connecting Switches',
-                            '{genUrl controller="dashboard" action="static" page="switches"}',
-                            null, 'Connecting Switches'
-                        ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','Port Security Policies',
-                            '{genUrl controller="dashboard" action="static" page="port-security"}',
-                            null, 'Port Security Policies'
-                        ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','AS112 Service',
-                            '{genUrl controller="dashboard" action="as112"}',
-                            null, 'AS112 Service'
                         ],
                         ['<img src="{genUrl}/images/joomla-admin/menu/document.png" />','Route Servers',
                             '{genUrl controller="dashboard" action="rs-info"}',
@@ -175,62 +100,12 @@
                 {if $identity.user.privs eq 3}
                     [null,'Statistics','{genUrl controller="customer" action="statistics-overview"}',null,'Statistics',
                         ['<img src="{genUrl}/images/joomla-admin/menu/system-users.png" />', 'Last Logins',  '{genUrl controller="user" action="last"}',
-                            null, 'Last Logins'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />','Overall Peering Statistics',  '{genUrl controller="dashboard" action="traffic-stats"}',
-                            null, 'Overall Peerings Statistics'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/users.png" />','Member Statistics - Aggregate',  '{genUrl controller="customer" action="statistics-overview"}',
-                            null, 'Member Statistics - Aggregate'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/users.png" />','Member Statistics - By LAN', null, null, 'Member Statistics - By LAN',
-
-                             {foreach from=$config.peering_matrix.public key=index item=lan}
-                                 ['<img src="{genUrl}/images/joomla-admin/menu/users.png" />',
-                                     '{$lan.name}', '{genUrl controller="customer" action="statistics-by-lan" lan=$lan.number}',
-                                     null,
-                                     '{$lan.name}'
-                                 ],
-                             {/foreach}
-
-                        ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/users.png" />','List Members',  '{genUrl controller="customer" action="statistics-list"}',
-                             null, 'List Members'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Trunk Graphs',  '{genUrl controller="dashboard" action="trunk-graphs"}',
-                             null, 'Trunk Graphs'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Switch Aggregate Graphs',  '{genUrl controller="dashboard" action="switch-graphs"}',
-                              null, 'Switch Aggregate Graphs'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'League Table',  '{genUrl controller="customer" action="league-table"}',
-                            null, 'League Table'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', '95th Percentiles', '{genUrl controller="customer" action="ninety-fifth"}',
-                             null, '95th Percentiles'   ]
-                    ],
-                {elseif $identity.user.privs eq 1 and $customer->isFullMember()}
-                    [null,'Statistics','{genUrl controller="dashboard" action="statistics"}',null,'Statistics',
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />','Overall Peering Statistics',  '{genUrl controller="dashboard" action="traffic-stats"}',
-                            null, 'Overall Peerings Statistics'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'My Statistics', '{genUrl controller="dashboard" action="statistics"}',
-                            null, 'My Statistics'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Trunk Graphs',  '{genUrl controller="dashboard" action="trunk-graphs"}',
-                            null, 'Trunk Graphs'   ],
-                        ['<img src="{genUrl}/images/joomla-admin/menu/rack.png" />', 'Switch Aggregate Graphs',  '{genUrl controller="dashboard" action="switch-graphs"}',
-                            null, 'Switch Aggregate Graphs'   ]
+                            null, 'Last Logins'   ]
                     ],
                 {/if}
                 _cmSplit,
                 {if $identity.user.privs eq 1}
                     [null, 'Support','{genUrl controller="dashboard" action="static" page="support"}',null,'Support'],
-                    _cmSplit,
-                {/if}
-                {if $identity.user.privs eq 3 and isset( $config.menu.staff_links )}
-                    [null, 'Staff Links', null, null, 'Staff Links',
-
-                     {foreach from=$config.menu.staff_links item=i}
-
-                         [ '<img src="{genUrl}/images/joomla-admin/menu/globe1.png" />',
-                             '{$i.name}', '{$i.link}', null, '{$i.name}'
-                         ],
-
-                     {/foreach}
-
-                    ],
                     _cmSplit,
                 {/if}
                 {if $identity.user.privs neq 1}

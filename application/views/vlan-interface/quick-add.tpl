@@ -106,7 +106,7 @@ $(document).ready(function(){
 });
 
 
-/*
+
 $(document).ready( function() {
 	
     $( '#ipv6address' ).bind( 'focus', function() {
@@ -137,7 +137,7 @@ $(document).ready( function() {
         }
     });
 });
-*/
+
 /* ]]> */ </script> 
 {/literal}
 
