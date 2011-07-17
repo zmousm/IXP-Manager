@@ -42,7 +42,7 @@ class UserController extends INEX_Controller_FrontEnd
         $this->frontend[ 'columns' ] = array(
 
             'displayColumns' => array(
-                'id', 'username', 'password', 'email', 'authorisedMobile', 'custid', 'privs', 'disabled'
+                'id', 'username', 'email', 'authorisedMobile', 'custid', 'privs', 'disabled'
             ),
 
 	        'viewPanelRows' => array(
