@@ -136,6 +136,12 @@ $(document).ready( function() {
 			$( '#ipv6address' ).val( ipv6_start + b + a + ipv6_end );
         }
     });
+
+
+    $( '#irrdbfilter' ).bind( 'click', function() {
+        return confirm( "Do not set this unless you know what you are doing!" );
+    } );
+
 });
 
 /* ]]> */ </script> 

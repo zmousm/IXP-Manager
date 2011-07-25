@@ -91,29 +91,8 @@ class INEX_Form_QuickAddInterface extends INEX_Form
         $this->addElement( $descr );
 
 
-        $channel = $this->createElement( 'text', 'channelgroup' );
-        $channel->addValidator( 'int' )
-            ->setLabel( 'Channel Group Number' )
-            ->addFilter( 'StringTrim' )
-            ->addFilter( new INEX_Filter_StripSlashes() );
-        $this->addElement( $channel );
-
-        $mtu = $this->createElement( 'text', 'mtu' );
-        $mtu->addValidator( 'int' )
-            ->setLabel( 'MTU' )
-            ->addFilter( 'StringTrim' )
-            ->addFilter( new INEX_Filter_StripSlashes() );
-        $this->addElement( $mtu );
-
-
-
-        $trunk = $this->createElement( 'checkbox', 'trunk' );
-        $trunk->setLabel( 'Is 802.1q Trunk?' )
-            ->setCheckedValue( '1' );
-        $this->addElement( $trunk );
-
         $this->addDisplayGroup(
-            array( 'name', 'description', 'channelgroup', 'mtu', 'trunk' ),
+            array( 'name', 'description' ),
             'virtualInterfaceDisplayGroup'
         );
             
@@ -241,23 +220,9 @@ class INEX_Form_QuickAddInterface extends INEX_Form
 
 
 
-        $ipv4canping = $this->createElement( 'checkbox', 'ipv4canping' );
-        $ipv4canping->setLabel( 'IPv4 Can Ping?' )
-            ->setCheckedValue( '1' );
-        $this->addElement( $ipv4canping );
-
-        
-        
-        $ipv4monitorrcbgp = $this->createElement( 'checkbox', 'ipv4monitorrcbgp' );
-        $ipv4monitorrcbgp->setLabel( 'IPv4 Monitor RC BGP?' )
-            ->setCheckedValue( '1' );
-        $this->addElement( $ipv4monitorrcbgp );
-
-        
         $this->addDisplayGroup(
             array( 
-            	'ipv4enabled', 'ipv4addressid', 'ipv4hostname', 'ipv4bgpmd5secret', 
-            	'ipv4canping', 'ipv4monitorrcbgp' 
+            	'ipv4enabled', 'ipv4addressid', 'ipv4hostname', 'ipv4bgpmd5secret' 
             ),
             'ipv4DisplayGroup'
         );
@@ -305,22 +270,9 @@ class INEX_Form_QuickAddInterface extends INEX_Form
 
 
 
-        $ipv6canping = $this->createElement( 'checkbox', 'ipv6canping' );
-        $ipv6canping->setLabel( 'IPv6 Can Ping?' )
-            ->setCheckedValue( '1' );
-        $this->addElement( $ipv6canping );
-
-        
-        $ipv6monitorrcbgp = $this->createElement( 'checkbox', 'ipv6monitorrcbgp' );
-        $ipv6monitorrcbgp->setLabel( 'IPv6 Monitor RC BGP?' )
-            ->setCheckedValue( '1' );
-        $this->addElement( $ipv6monitorrcbgp );
-
-        
         $this->addDisplayGroup(
             array( 
-            	'ipv6enabled', 'ipv6addressid', 'ipv6address', 'ipv6hostname', 'ipv6bgpmd5secret', 
-            	'ipv6canping', 'ipv6monitorrcbgp' 
+            	'ipv6enabled', 'ipv6addressid', 'ipv6address', 'ipv6hostname', 'ipv6bgpmd5secret' 
             ),
         	'ipv6DisplayGroup'
         );
@@ -336,11 +288,6 @@ class INEX_Form_QuickAddInterface extends INEX_Form
         $this->addElement( $irrdbfilter );
 
         
-        $mcastenabled = $this->createElement( 'checkbox', 'mcastenabled' );
-        $mcastenabled->setLabel( 'Multicast Enabled?' )
-            ->setCheckedValue( '1' );
-        $this->addElement( $mcastenabled );
-
         $maxbgpprefix = $this->createElement( 'text', 'maxbgpprefix' );
         $maxbgpprefix->addValidator('int')
             ->addValidator( 'greaterThan', false, array( -1 ) )
@@ -349,26 +296,14 @@ class INEX_Form_QuickAddInterface extends INEX_Form
         $this->addElement( $maxbgpprefix  );
 
 
-        $rsclient = $this->createElement( 'checkbox', 'rsclient' );
-        $rsclient->setLabel( 'Route Server Client?' )
-            ->setCheckedValue( '1' );
+        $rsclient = $this->createElement( 'hidden', 'rsclient' );
+        $rsclient //->setLabel( 'Route Server Client?' )
+            ->setValue ('1' );
         $this->addElement( $rsclient );
 
-        $as112client = $this->createElement( 'checkbox', 'as112client' );
-        $as112client->setLabel( 'AS112 Client?' )
-            ->setCheckedValue( '1' );
-        $this->addElement( $as112client );
-
-        $busyhost = $this->createElement( 'checkbox', 'busyhost' );
-        $busyhost->setLabel( 'Busy host?' )
-            ->setCheckedValue( '1' );
-        $this->addElement( $busyhost );
-
-        
         $this->addDisplayGroup(
             array( 
-            	'irrdbfilter', 'mcastenabled', 'maxbgpprefix', 'rsclient', 
-            	'as112client', 'busyhost' 
+            	'irrdbfilter', 'maxbgpprefix', 'rsclient'
             ),
         	'vlanInterfaceDisplayGroup'
         );
