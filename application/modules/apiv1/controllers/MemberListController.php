@@ -44,7 +44,7 @@ class Apiv1_MemberListController extends IXP_Controller_API_V1Action
     {
         $this->preflight();
 
-        $this->getResponse()->setHeader( 'Content-Type', 'application/json' );
+        $this->getResponse()->setHeader( 'Content-Type', 'application/json; charset=utf-8' );
 
         $jsonoutput = array('version' => '2014110301');
 
@@ -54,6 +54,8 @@ class Apiv1_MemberListController extends IXP_Controller_API_V1Action
         $jsonoutput['ixp_info'] = $this->getListIXPInfo();
 
         $jsonoutput['member_list'] = $this->getListMemberInfo();
+
+        $jsonoutput = array('ixpmanager_export' => $jsonoutput);
 
         print json_encode($jsonoutput, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n";
     }
@@ -98,7 +100,7 @@ class Apiv1_MemberListController extends IXP_Controller_API_V1Action
         foreach( $customers as $c ) {
             $ixp = $this->getD2R( '\\Entities\\IXP' )->getDefault();
 
-            $conn = array();
+            /* $conn = array(); */
             $connlist = array();
             foreach( $c->getVirtualInterfaces() as $vi ) {
                 $iflist = array();
@@ -106,14 +108,34 @@ class Apiv1_MemberListController extends IXP_Controller_API_V1Action
                     if( $pi->getStatus() == \Entities\PhysicalInterface::STATUS_CONNECTED ) {
                         $iflist[] = array (
                             'switch_id'	=> $pi->getSwitchPort()->getSwitcher()->getID(),
+                            'switch_name'	=> $pi->getSwitchPort()->getSwitcher()->getName(),
                             'if_speed'	=> $pi->getSpeed(),
+                            'if_id'	=> $pi->getId(),
+                            'if_name'	=> $pi->getSwitchPort()->getIfName(),
+                            'if_alias'	=> $pi->getSwitchPort()->getIfAlias(),
                         );
                     }
                 }
+                $conn_lag = count($iflist) > 1;
+                $conn_id = $vi->getId();
+                $conn_name = $vi->getName();
+                $conn_descr = $vi->getDescription();
+                $conn_changroup = $vi->getChannelGroup();
+                $conn_trunk = $vi->getTrunk();
+                $conn_switches = array_unique(array_reduce($iflist,
+                                                           function($carry, $item) {
+                                                               $carry[] = $item['switch_name'];
+                                                               return $carry;
+                                                           },
+                                                           array()));
 
-                $vlanentry = array();
+                /* $vlanentry = array(); */
+                $vlanlist = array();
                 foreach( $vi->getVlanInterfaces() as $vli ) {
+                    $vlanentry = array();
                     $vlanentry['vlan_id'] = $vli->getVlan()->getId();
+                    $vlanentry['vlan_number'] = $vli->getVlan()->getNumber();
+                    $vlanentry['vlan_name'] = $vli->getVlan()->getName();
                     if ($vli->getIpv4enabled()) {
                         $vlanentry['ipv4']['address'] = $vli->getIPv4Address()->getAddress();
                         $vlanentry['ipv4']['routeserver'] = $vli->getRsclient();
@@ -126,17 +148,32 @@ class Apiv1_MemberListController extends IXP_Controller_API_V1Action
                         $vlanentry['ipv6']['max_prefix'] = $vi->getCustomer()->getMaxprefixes();
                         $vlanentry['ipv6']['as_macro'] = $vi->getCustomer()->resolveAsMacro( 6, "AS" );
                     }
+                    $vlanlist[] = $vlanentry;
                 }
 
                 $conn = array();
                 $conn['state'] = 'active';
+                /* $conn['lag'] = $conn_lag; */
+                $conn['conn_id'] = $conn_id;
+                $conn['conn_description'] = $conn_descr;
+                /* if ($conn_name) { */
+                    $conn['conn_name'] = $conn_name;
+                /* } */
+                /* if ($conn_lag) { */
+                    $conn['channel_group'] = $conn_changroup;
+                /* } */
+                $conn['trunk'] = $conn_trunk;
                 $conn['if_list'] = $iflist;
-                $conn['vlan_list'][] = $vlanentry;
+                $conn['vlan_list'] = $vlanlist;
+                /* if ($conn_lag) { */
+                    $conn['switch_names'] = $conn_switches;
+                /* } */
                 $connlist[] = $conn;
             }
             $memberinfo[] = [
                 'asnum'			=> $c->getAutsys(),
                 'name'			=> $c->getName(),
+                'short_name'		=> $c->getShortname(),
                 'url'			=> $c->getCorpwww(),
                 'contact_email'		=> array( $c->getPeeringemail() ),
                 'contact_phone'		=> array( $c->getNocphone() ),
