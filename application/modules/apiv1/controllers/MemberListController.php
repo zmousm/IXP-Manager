@@ -163,11 +163,19 @@ class Apiv1_MemberListController extends IXP_Controller_API_V1Action
                     $conn['channel_group'] = $conn_changroup;
                 /* } */
                 $conn['trunk'] = $conn_trunk;
-                $conn['if_list'] = $iflist;
                 $conn['vlan_list'] = $vlanlist;
-                /* if ($conn_lag) { */
-                    $conn['switch_names'] = $conn_switches;
-                /* } */
+                if (count($iflist) == 1) {
+		    foreach($iflist[0] as $k => $v) {
+		        $conn[$k] = $v;
+		    }
+		} else {
+                    $conn['if_list'] = $iflist;
+                    if (count($conn_switches) == 1) {
+                        $conn['switch_name'] = $conn_switches[0];
+                    } else {
+                        $conn['switch_names'] = $conn_switches;
+                    }
+		}
                 $connlist[] = $conn;
             }
             $memberinfo[] = [
